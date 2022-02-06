@@ -17,14 +17,17 @@ Get-Translation [-Text] <String> [[-FromLanguage] <String>] [-ToLanguage] <Strin
 ```
 
 ## DESCRIPTION
-Returns a translation of a string based on the given "From Language" and "To Language" using the Microsoft Translator API.
-This function relies on a preconfigured stored credential to retrieve the api key.
-The CredentialManager module is needed 
-to create the preconfigured stored credential.
+Returns a translation of a string based on the given "From Language" and "To Language" using the 
+Microsoft Translator API.
+This function relies on a preconfigured stored credential to retrieve the api
+key.
+To create the preconfigured stored credential, ensure the CredentialManager module is installed 
+and run the following command:
 
-For more information on the Microsoft Translator API visit https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
+New-StoredCredential -Target Translator -UserName Translator -Password \<Api Key\> -Persist LOCAL_MACHINE
 
-For a list of supported language codes visit https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support
+For more information on the Microsoft Translator API visit: 
+https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
 
 ## EXAMPLES
 

@@ -3,13 +3,15 @@ function Get-Translation{
         .SYNOPSIS
             Translates a string from one language to another.
         .DESCRIPTION
-            Returns a translation of a string based on the given "From Language" and "To Language" using the Microsoft Translator API.
-            This function relies on a preconfigured stored credential to retrieve the api key. The CredentialManager module is needed 
-            to create the preconfigured stored credential.
+            Returns a translation of a string based on the given "From Language" and "To Language" using the 
+            Microsoft Translator API. This function relies on a preconfigured stored credential to retrieve the api
+            key. To create the preconfigured stored credential, ensure the CredentialManager module is installed 
+            and run the following command:
 
-            For more information on the Microsoft Translator API visit https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
+            New-StoredCredential -Target Translator -UserName Translator -Password <Api Key> -Persist LOCAL_MACHINE
 
-            For a list of supported language codes visit https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support 
+            For more information on the Microsoft Translator API visit: 
+            https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
         .PARAMETER Text
             This parameter is the string that will be translated.
         .PARAMETER FromLanguage
@@ -17,11 +19,11 @@ function Get-Translation{
         .PARAMETER ToLanguage  
             This parameter is the two-character language code of the language the text will be translated from.
         .EXAMPLE
-            PS C:\> Get-Translation -FromLanguage en -ToLanguage es -Text "The cake is a lie"
+            Get-Translation -FromLanguage en -ToLanguage es -Text "The cake is a lie"
 
             El pastel es mentira
         .EXAMPLE
-            PS C:\Users\Adam> Get-Translation
+            Get-Translation
 
             cmdlet Get-Translation at command pipeline position 1
             Supply values for the following parameters:
@@ -29,7 +31,7 @@ function Get-Translation{
             ToLanguage: fr
             Hier, tous mes ennuis semblaient si loin
         .EXAMPLE
-            PS C:\Users\Adam> Get-Translation -from es -to en -text "Feliz navidad"  
+            Get-Translation -from es -to en -text "Feliz navidad"  
 
             Merry Christmas
         .NOTES
@@ -42,41 +44,37 @@ function Get-Translation{
         [string]
         $Text,
         [Parameter(Mandatory = $false)]
-        [Alias('From')]
+        [Alias("From")]
         [string]
         $FromLanguage,
         [Parameter(Mandatory = $true)]
-        [Alias('To')]
+        [Alias("To")]
         [string]
         $ToLanguage
-    )
-    process{
-        # Retrieve API Key from preconfigured stored credential
-        $Cred = Get-StoredCredential -Target 'Translator'
-        $APIKey = $Cred.GetNetworkCredential().password
+    ) # end param
+    
+    # Get the API Key from the preconfigured stored credential
+    $Cred = Get-StoredCredential -Target "Translator"
+    $APIKey = $Cred.GetNetworkCredential().password
 
-        $BaseUri = 'https://api.cognitive.microsofttranslator.com/translate?api-version=3.0'
-
-        $Location = 'global'
-
-        $Body = @{'text' = $Text} | ConvertTo-Json
-
-        $RestParams = @{
-            Uri = $BaseUri + "&from=$FromLanguage&to=$ToLanguage"
-            Method = "POST"
-            Headers = @{
-                'Ocp-Apim-Subscription-Key' = $APIKey 
-                'Ocp-Apim-Subscription-Region' = $Location
-                'Content-type' = 'application/json'
-            }
-            Body = "[$Body]"
+    # Set up REST parameters
+    $BaseUri = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0"
+    $Body = @{"text" = $Text} | ConvertTo-Json
+    $RestParams = @{
+        Uri = $BaseUri + "&from=$FromLanguage&to=$ToLanguage"
+        Method = "POST"
+        Headers = @{
+            "Ocp-Apim-Subscription-Key" = $APIKey 
+            "Content-type" = "application/json"
         }
-
-        try {
-            $Response = Invoke-RestMethod @RestParams
-            $Response.translations.text
-        } catch [System.Net.WebException]{
-            $Error[0].ErrorDetails.Message | ConvertFrom-Json
-        } # end try catch
+        Body = "[$Body]"
     }
+
+    # Get the translation
+    try {
+        $Response = Invoke-RestMethod @RestParams
+        $Response.translations.text
+    } catch {
+        Write-Error $_.Exception.Message
+    } # end try catch
 }

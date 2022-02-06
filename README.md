@@ -8,6 +8,8 @@ This project contains helpful functions for translating text to different langua
 Functions include:
 
 Get-Translation
+Get-Language
+Get-SupportedLanguages
 
 
 ## RELATED LINKS
