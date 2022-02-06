@@ -24,7 +24,9 @@ key.
 To create the preconfigured stored credential, ensure the CredentialManager module is installed 
 and run the following command:
 
+```
 New-StoredCredential -Target Translator -UserName Translator -Password \<Api Key\> -Persist LOCAL_MACHINE
+```
 
 For more information on the Microsoft Translator API visit: 
 https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
@@ -34,27 +36,27 @@ https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
 ### EXAMPLE 1
 ```
 Get-Translation -FromLanguage en -ToLanguage es -Text "The cake is a lie"
-```
 
 El pastel es mentira
+```
 
 ### EXAMPLE 2
 ```
 Get-Translation
-```
 
 cmdlet Get-Translation at command pipeline position 1
 Supply values for the following parameters:
 Text: Yesterday, all my troubles seemed so far away
 ToLanguage: fr
 Hier, tous mes ennuis semblaient si loin
+```
 
 ### EXAMPLE 3
 ```
 Get-Translation -from es -to en -text "Feliz navidad"
-```
 
 Merry Christmas
+```
 
 ## PARAMETERS
 
