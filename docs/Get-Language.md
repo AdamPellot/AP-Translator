@@ -23,7 +23,9 @@ preconfigured stored credential to retrieve the api key.
 To create the preconfigured stored credential, 
 ensure the CredentialManager module is installed and run the following command:
 
+```
 New-StoredCredential -Target Translator -UserName Translator -Password \<Api Key\> -Persist LOCAL_MACHINE
+```
 
 For more information on the Microsoft Translator API visit:
 https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
@@ -33,9 +35,9 @@ https://docs.microsoft.com/en-us/azure/cognitive-services/translator/
 ### EXAMPLE 1
 ```
 Get-Language "Me gusta comer helado"
-```
 
 Spanish
+```
 
 ## PARAMETERS
 
